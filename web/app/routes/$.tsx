@@ -1,6 +1,6 @@
 import { Response, redirect } from '@remix-run/node';
 
-export function loader({ params }) {
+export function loader({ params }: any) {
   if (params['*'] === 'exp') {
     return redirect('/expenses');
   }
