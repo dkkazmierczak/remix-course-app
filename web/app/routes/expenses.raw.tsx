@@ -25,6 +25,6 @@ const DUMMY_EXPENSES = [
   },
 ];
 
-export default function loader() {
+export function loader() {
   return DUMMY_EXPENSES;
 }
