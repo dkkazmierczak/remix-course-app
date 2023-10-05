@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import { FaLock } from 'react-icons/fa';
 
 function AuthForm() {
