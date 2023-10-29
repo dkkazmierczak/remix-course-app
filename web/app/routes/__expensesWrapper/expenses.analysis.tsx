@@ -2,6 +2,7 @@ import { type LoaderArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import Chart from '~/components/expenses/Chart';
 import ExpenseStatistics from '~/components/expenses/ExpenseStatistics';
+import { requireUserSession } from '~/data/auth.server';
 import { getExpenses } from '~/data/expenses.server';
 
 export default function ExpensesAnalysisPage() {
@@ -28,6 +29,7 @@ export default function ExpensesAnalysisPage() {
 }
 
 export async function loader({ request }: LoaderArgs) {
+  await requireUserSession(request);
   const expenses = await getExpenses();
   return expenses;
 }
