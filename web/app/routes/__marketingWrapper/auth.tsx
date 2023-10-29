@@ -1,6 +1,6 @@
 import AuthForm from '~/components/auth/AuthForm';
 import authStyles from '../../styles/authStyles.css';
-import { redirect, type LinksFunction, type LoaderArgs } from '@remix-run/node';
+import { type LinksFunction, type LoaderArgs } from '@remix-run/node';
 import { validateCredentials } from '~/data/validation.server';
 import { login, signup } from '~/data/auth.server';
 
@@ -29,8 +29,9 @@ export async function action({ request }: LoaderArgs) {
       return await signup(credentials);
     }
   } catch (error) {
-    if (error.status === 422) {
+    if (/(422|401|403)/.test(error.status)) {
       return { credentials: error.message };
     }
+    return { credentials: 'Something went wrong!' };
   }
 }
