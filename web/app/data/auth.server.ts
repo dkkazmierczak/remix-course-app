@@ -28,6 +28,15 @@ async function createUserSession(userId: number, redirectPath: string) {
   });
 }
 
+export async function getUserFromSession(request) {
+  const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+  const userId = session.get('userId');
+
+  if (!userId) return null;
+
+  return userId;
+}
+
 type signupProps = {
   email: string;
   password: string;
