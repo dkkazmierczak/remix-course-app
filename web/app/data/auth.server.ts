@@ -17,24 +17,35 @@ const sessionStorage = createCookieSessionStorage({
 async function createUserSession(userId: number, redirectPath: string) {
   const session = await sessionStorage.getSession();
   session.set('userId', userId);
-  console.log('in create user session');
+
+  const cookie = await sessionStorage.commitSession(session);
 
   //something wrong with this. It doesnt redirect
   return redirect(redirectPath, {
     status: 303,
     headers: {
-      'Set-Cookie': await sessionStorage.commitSession(session),
+      'Set-Cookie': cookie,
     },
   });
 }
 
 export async function getUserFromSession(request) {
   const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-  const userId = session.get('userId');
+  const userId = session.has('userId');
 
   if (!userId) return null;
 
   return userId;
+}
+
+export async function destroyUserSession(request) {
+  const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+
+  return redirect('/', {
+    headers: {
+      'Set-Cookie': await sessionStorage.destroySession(session),
+    },
+  });
 }
 
 type signupProps = {
