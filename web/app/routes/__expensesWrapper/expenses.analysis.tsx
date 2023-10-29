@@ -1,38 +1,33 @@
+import { type LoaderArgs } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
 import Chart from '~/components/expenses/Chart';
 import ExpenseStatistics from '~/components/expenses/ExpenseStatistics';
-
-const DUMMY_EXPENSES = [
-  {
-    id: 'e1',
-    title: 'Toilet Paper',
-    amount: 94.12,
-    date: new Date().toISOString(),
-  },
-  {
-    id: 'e2',
-    title: 'New TV',
-    amount: 799.49,
-    date: new Date().toISOString(),
-  },
-  {
-    id: 'e3',
-    title: 'Car Insurance',
-    amount: 294.67,
-    date: new Date().toISOString(),
-  },
-  {
-    id: 'e4',
-    title: 'New Desk (Wooden)',
-    amount: 450,
-    date: new Date().toISOString(),
-  },
-];
+import { getExpenses } from '~/data/expenses.server';
 
 export default function ExpensesAnalysisPage() {
+  const expenses = useLoaderData<typeof loader>();
+
+  const hasExpenses = expenses && expenses.length > 0;
   return (
     <main>
-      <Chart expenses={DUMMY_EXPENSES} />
-      <ExpenseStatistics expenses={DUMMY_EXPENSES} />
+      {hasExpenses ? (
+        <>
+          <Chart expenses={expenses} />
+          <ExpenseStatistics expenses={expenses} />
+        </>
+      ) : (
+        <section id='no-expenses'>
+          <h1>No expenses found.</h1>
+          <p>
+            Start by <Link to='/expenses/add'>adding one</Link>.
+          </p>
+        </section>
+      )}
     </main>
   );
+}
+
+export async function loader({ request }: LoaderArgs) {
+  const expenses = await getExpenses();
+  return expenses;
 }
