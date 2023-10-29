@@ -1,11 +1,11 @@
-import { Link, useSearchParams } from '@remix-run/react';
+import { Form, Link, useSearchParams } from '@remix-run/react';
 import { FaLock, FaUserPlus } from 'react-icons/fa';
 
 function AuthForm() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const authMode = searchParams.get('mode') || 'login';
   return (
-    <form method='post' className='form' id='auth-form'>
+    <Form method='post' className='form' id='auth-form'>
       <div className='icon-img'>{authMode === 'login' ? <FaLock /> : <FaUserPlus />}</div>
       <p>
         <label htmlFor='email'>Email Address</label>
@@ -21,7 +21,7 @@ function AuthForm() {
           {authMode === 'login' ? 'Create a new user' : 'Log in with existing user'}
         </Link>
       </div>
-    </form>
+    </Form>
   );
 }
 
