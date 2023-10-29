@@ -63,7 +63,7 @@ export async function deleteExpense(id) {
   try {
     return await prisma.expense.delete({
       where: {
-        id: 'abc',
+        id,
       },
     });
   } catch (error) {
