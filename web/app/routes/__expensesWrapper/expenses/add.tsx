@@ -2,7 +2,7 @@ import ExpenseForm from '~/components/expenses/ExpenseForm';
 import Modal from '~/components/util/Modal';
 import { useNavigate } from '@remix-run/react';
 import { addExpense } from '~/data/expenses.server';
-import { redirect } from '@remix-run/node';
+import { type LoaderArgs, redirect } from '@remix-run/node';
 import { validateExpenseInput } from '~/data/validation.server';
 
 export default function AddExpensesPage() {
@@ -19,7 +19,7 @@ export default function AddExpensesPage() {
   );
 }
 
-export async function action({ request, params }) {
+export async function action({ request, params }: LoaderArgs) {
   const formData = await request.formData();
   // formData.get('title');
   const expenseData = Object.fromEntries(formData);
