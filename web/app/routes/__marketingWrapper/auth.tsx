@@ -1,6 +1,7 @@
 import AuthForm from '~/components/auth/AuthForm';
 import authStyles from '../../styles/authStyles.css';
 import type { LinksFunction, LoaderArgs } from '@remix-run/node';
+import { validateCredentials } from '~/data/validation.server';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: authStyles }];
 
@@ -14,6 +15,12 @@ export async function action({ request }: LoaderArgs) {
 
   const formData = await request.formData();
   const credentials = Object.fromEntries(formData);
+
+  try {
+    validateCredentials(credentials);
+  } catch (error) {
+    return error;
+  }
 
   if (authMode === 'login') {
     //login
