@@ -1,3 +1,4 @@
+import { Response } from '@remix-run/node';
 import { Form, Link, useActionData, useMatches, useNavigation, useParams } from '@remix-run/react';
 
 function ExpenseForm() {
@@ -9,6 +10,16 @@ function ExpenseForm() {
   const navigation = useNavigation();
   const expenses = matches.find(match => match.id === 'routes/__expensesWrapper/expenses')?.data;
   const expenseData = expenses.find((expense: any) => expense.id === params.id);
+
+  if (params.id && !expenseData) {
+    // json is meant be used on backend
+    // throw json
+
+    //Response doesnt work
+    // throw new Response();
+    throw new Error();
+    return <p>invalid</p>;
+  }
 
   const defaultValues = expenseData
     ? {
