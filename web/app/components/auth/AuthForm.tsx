@@ -23,7 +23,7 @@ function AuthForm() {
       {validationErrors && (
         <ul>
           {Object.values(validationErrors).map((error, index) => (
-            <li key={index}>{error as atring}</li>
+            <li key={index}>{error as string}</li>
           ))}
         </ul>
       )}

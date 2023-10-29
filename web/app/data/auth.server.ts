@@ -1,6 +1,6 @@
 import { hash, compare } from 'bcryptjs';
 import { prisma } from './database.server';
-import { createCookieSessionStorage } from '@remix-run/node';
+import { createCookieSessionStorage, redirect } from '@remix-run/node';
 
 const SESSION_SECRET = process.env.SESSION_SECRET!;
 
@@ -13,6 +13,20 @@ const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
   },
 });
+
+async function createUserSession(userId: number, redirectPath: string) {
+  const session = await sessionStorage.getSession();
+  session.set('userId', userId);
+  console.log('in create user session');
+
+  //something wrong with this. It doesnt redirect
+  return redirect(redirectPath, {
+    status: 303,
+    headers: {
+      'Set-Cookie': await sessionStorage.commitSession(session),
+    },
+  });
+}
 
 type signupProps = {
   email: string;
@@ -30,7 +44,8 @@ export async function signup({ email, password }: signupProps) {
 
   const hashedPassword = await hash(password, 12);
 
-  await prisma.user.create({ data: { email, password: hashedPassword } });
+  const user = await prisma.user.create({ data: { email, password: hashedPassword } });
+  return createUserSession(+user.id, '/expenses');
 }
 
 export async function login({ email, password }: signupProps) {
@@ -47,4 +62,5 @@ export async function login({ email, password }: signupProps) {
     error.status = 401;
     throw error;
   }
+  return createUserSession(+existingUser.id, '/expenses');
 }
