@@ -1,4 +1,4 @@
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
 import { prisma } from './database.server';
 
 type signupProps = {
@@ -18,4 +18,20 @@ export async function signup({ email, password }: signupProps) {
   const hashedPassword = await hash(password, 12);
 
   await prisma.user.create({ data: { email, password: hashedPassword } });
+}
+
+export async function login({ email, password }: signupProps) {
+  const existingUser = await prisma.user.findFirst({ where: { email } });
+
+  if (!existingUser) {
+    const error = new Error('User with the provided email does not exist');
+    error.status = 401;
+    throw error;
+  }
+  const passwordCorrect = await compare(password, existingUser.password);
+  if (!passwordCorrect) {
+    const error = new Error('Incorrect password');
+    error.status = 401;
+    throw error;
+  }
 }
