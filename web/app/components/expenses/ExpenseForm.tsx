@@ -4,6 +4,15 @@ function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
 
+  //can add "useSubmit() function to the form onSubmit handler function
+  //const submit = useSubmit()
+  //function submitHandler(event) {
+  //  event.preventDefault()
+  //  submit(event.target, {
+  //  method: 'post',
+  // })
+  // }
+
   return (
     <form method='post' className='form' id='expense-form'>
       <p>
