@@ -14,13 +14,10 @@ const sessionStorage = createCookieSessionStorage({
   },
 });
 
-async function createUserSession(userId: number, redirectPath: string) {
+async function createUserSession(userId: string, redirectPath: string) {
   const session = await sessionStorage.getSession();
-  session.set('userId', userId);
-
   const cookie = await sessionStorage.commitSession(session);
 
-  //something wrong with this. It doesnt redirect
   return redirect(redirectPath, {
     status: 303,
     headers: {
@@ -29,9 +26,9 @@ async function createUserSession(userId: number, redirectPath: string) {
   });
 }
 
-export async function getUserFromSession(request) {
+export async function getUserFromSession(request: Request) {
   const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-  const userId = session.has('userId');
+  const userId = session.get('userId') as string;
 
   if (!userId) return null;
 
@@ -48,12 +45,13 @@ export async function destroyUserSession(request) {
   });
 }
 
-export async function requireUserSession(request) {
+export async function requireUserSession(request: Request) {
   const userId = await getUserFromSession(request);
 
   if (!userId) {
     throw redirect('/auth?mode=login');
   }
+  return userId;
 }
 
 type signupProps = {
@@ -73,7 +71,7 @@ export async function signup({ email, password }: signupProps) {
   const hashedPassword = await hash(password, 12);
 
   const user = await prisma.user.create({ data: { email, password: hashedPassword } });
-  return createUserSession(+user.id, '/expenses');
+  return createUserSession(user.id, '/expenses');
 }
 
 export async function login({ email, password }: signupProps) {
@@ -90,5 +88,5 @@ export async function login({ email, password }: signupProps) {
     error.status = 401;
     throw error;
   }
-  return createUserSession(+existingUser.id, '/expenses');
+  return await createUserSession(existingUser?.id, '/expenses');
 }

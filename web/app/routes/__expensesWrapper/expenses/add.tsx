@@ -4,6 +4,7 @@ import { useNavigate } from '@remix-run/react';
 import { addExpense } from '~/data/expenses.server';
 import { type LoaderArgs, redirect } from '@remix-run/node';
 import { validateExpenseInput } from '~/data/validation.server';
+import { requireUserSession } from '~/data/auth.server';
 
 export default function AddExpensesPage() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function AddExpensesPage() {
 }
 
 export async function action({ request, params }: LoaderArgs) {
+  const userId = await requireUserSession(request);
   const formData = await request.formData();
   // formData.get('title');
   const expenseData = Object.fromEntries(formData);
@@ -30,6 +32,6 @@ export async function action({ request, params }: LoaderArgs) {
     return error;
   }
 
-  await addExpense(expenseData);
+  await addExpense(expenseData, userId);
   return redirect('/expenses');
 }

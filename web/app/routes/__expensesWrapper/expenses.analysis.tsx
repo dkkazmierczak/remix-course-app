@@ -29,7 +29,7 @@ export default function ExpensesAnalysisPage() {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  await requireUserSession(request);
-  const expenses = await getExpenses();
+  const userId = await requireUserSession(request);
+  const expenses = await getExpenses(userId);
   return expenses;
 }
