@@ -43,3 +43,9 @@ export default function Index() {
 }
 
 export function meta() {}
+
+export function headers() {
+  return {
+    'cache-control': 'max-age=3600', // 60 minutes
+  };
+}
