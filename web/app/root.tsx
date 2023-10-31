@@ -1,5 +1,15 @@
 import type { LinksFunction } from '@remix-run/node';
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from '@remix-run/react';
+import {
+  Link,
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useCatch,
+  useMatches,
+} from '@remix-run/react';
 import sharedStyles from './styles/shared.css';
 import Error from './components/util/Error';
 
@@ -17,6 +27,9 @@ type DocumentProps = {
 };
 
 const Document = ({ title, children }: DocumentProps) => {
+  const matches = useMatches();
+  const disableJS = matches.some(match => match.handle?.disableJS);
+
   return (
     <html lang='en'>
       <head>
@@ -30,7 +43,7 @@ const Document = ({ title, children }: DocumentProps) => {
       <body>
         {children}
         <ScrollRestoration />
-        <Scripts />
+        {!disableJS && <Scripts />}
         <LiveReload />
       </body>
     </html>

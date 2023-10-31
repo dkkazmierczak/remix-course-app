@@ -49,3 +49,5 @@ export function headers() {
     'cache-control': 'max-age=3600', // 60 minutes
   };
 }
+
+export const handle = { disableJS: true };

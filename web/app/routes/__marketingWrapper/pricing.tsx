@@ -42,3 +42,5 @@ export function headers({ actionHeaders, loaderHeaders, parentHeaders }: Headers
     'cache-control': parentHeaders.get('cache-control'), // 60 minutes
   };
 }
+
+export const handle = { disableJS: true };
