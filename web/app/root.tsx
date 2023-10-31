@@ -3,6 +3,12 @@ import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useC
 import sharedStyles from './styles/shared.css';
 import Error from './components/util/Error';
 
+export const meta = () => ({
+  charset: 'utf-8',
+  title: 'Remix App',
+  viewport: 'width=device-width,initial-scale=1',
+});
+
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: sharedStyles }];
 
 type DocumentProps = {
@@ -14,8 +20,8 @@ const Document = ({ title, children }: DocumentProps) => {
   return (
     <html lang='en'>
       <head>
+        {title && <title>{title}</title>}
         <Meta />
-        {title}
         <link rel='preconnect' href='https://fonts.googleapis.com' />
         <link rel='preconnect' href='https://fonts.gstatic.com' />
         <link href='https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap' rel='stylesheet' />

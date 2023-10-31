@@ -7,6 +7,15 @@ import { validateExpenseInput } from '~/data/validation.server';
 // import { type LoaderArgs } from '@remix-run/node';
 // import { getExpense } from '~/data/expenses.server';
 
+// window.location.href (url)
+export const meta = ({ params, location, data, parentsData }) => {
+  const expense = parentsData['routes/__expensesWrapper/expenses'].find(expense => expense.id === params.id);
+  return {
+    title: `Edit ${expense.title}`,
+    description: `Update ${expense.title}`,
+  };
+};
+
 export default function UpdateExpensesPage() {
   const navigate = useNavigate();
 
