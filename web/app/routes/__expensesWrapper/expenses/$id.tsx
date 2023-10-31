@@ -8,8 +8,8 @@ import { validateExpenseInput } from '~/data/validation.server';
 // import { getExpense } from '~/data/expenses.server';
 
 // window.location.href (url)
-export const meta = ({ params, location, data, parentsData }) => {
-  const expense = parentsData['routes/__expensesWrapper/expenses'].find(expense => expense.id === params.id);
+export const meta = ({ params, location, data, parentsData }: any) => {
+  const expense = parentsData['routes/__expensesWrapper/expenses'].find((expense: any) => expense.id === params?.id);
   return {
     title: `Edit ${expense.title}`,
     description: `Update ${expense.title}`,

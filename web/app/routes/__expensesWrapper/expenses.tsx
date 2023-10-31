@@ -1,4 +1,4 @@
-import { type LoaderArgs } from '@remix-run/node';
+import { type HeadersArgs, json, type LoaderArgs } from '@remix-run/node';
 import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import { FaDownload, FaPlus } from 'react-icons/fa';
 import ExpensesList from '~/components/expenses/ExpensesList';
@@ -41,5 +41,16 @@ export default function ExpensesLayout() {
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserSession(request);
   const expenses = await getExpenses(userId);
-  return expenses;
+  // return expenses;
+  return json(expenses, {
+    headers: {
+      'cache-control': 'max-age=3',
+    },
+  });
+}
+
+export function headers({ actionHeaders, loaderHeaders, parentHeaders }: HeadersArgs) {
+  return {
+    'cache-control': loaderHeaders.get('cache-control'), // 60 minutes
+  };
 }

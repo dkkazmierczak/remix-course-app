@@ -35,3 +35,9 @@ export async function action({ request }: LoaderArgs) {
     return { credentials: 'Something went wrong!' };
   }
 }
+
+export function headers({ actionHeaders, loaderHeaders, parentHeaders }: HeadersArgs) {
+  return {
+    'cache-control': parentHeaders.get('cache-control'), // 60 minutes
+  };
+}

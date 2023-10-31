@@ -18,3 +18,9 @@ export default function MarketingAppLayout() {
 export function loader({ request }: LoaderArgs) {
   return getUserFromSession(request);
 }
+
+export function headers() {
+  return {
+    'cache-control': 'max-age=3600', // 60 minutes
+  };
+}

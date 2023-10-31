@@ -35,7 +35,7 @@ export async function getUserFromSession(request: Request) {
   return userId;
 }
 
-export async function destroyUserSession(request) {
+export async function destroyUserSession(request: Request) {
   const session = await sessionStorage.getSession(request.headers.get('Cookie'));
 
   return redirect('/', {
